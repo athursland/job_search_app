@@ -6,7 +6,7 @@ dotenv.config()
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: 'root', 
-    password: 'carola2001', 
+    password: '@Jtmetjmt4!', 
     database: process.env.MYSQL_DATABASE
 }).promise()
 
@@ -33,6 +33,6 @@ export async function createUser(title, email, major) {
     return getUser(id)
 }
 
-const result = await createUser('test', 'test', 'test')
-const users = await getUser(2)
-console.log(result)
+//const result = await createUser('test', 'test', 'test')
+//const users = await getUser(2)
+//console.log(result)
