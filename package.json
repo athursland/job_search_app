@@ -5,7 +5,7 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev": "npx nodemon app.js"
+    "dev": "npx nodemon server/app.js"
   },
   "author": "",
   "license": "ISC",
