@@ -10,6 +10,33 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+// // check that this is right ...
+// export async function getJobs() {
+//     const [rows] = await pool.query("SELECT * from jobs")
+//     return rows
+// }
+
+// // check that this is right ...
+// export async function getJob(id) {
+//     const [rows] = await pool.query(`SELECT * 
+//     FROM jobs
+//     WHERE id = ?
+//     `, [id])
+//     return rows[0]
+// }
+
+// // check that this is right ...
+// export async function createJob(id) {
+//     const [result] =  await pool.query(`
+//     INSERT INTO jobs(company, title, progress, deadline)
+//     VALUES (?, ?, ?, ?)
+//     `, [company, title, progress, deadline])
+    
+//     const id = result.insertId
+//     return getJob(id)
+// }
+// ```
+
 export async function getUsers() {
     const [rows] = await pool.query("SELECT * FROM users")
     return rows
@@ -33,6 +60,6 @@ export async function createUser(title, email, major) {
     return getUser(id)
 }
 
-//const result = await createUser('test', 'test', 'test')
-//const users = await getUser(2)
-//console.log(result)
+// const result = await createUser('test', 'test', 'test')
+// const users = await getUser(2)
+// console.log(result)

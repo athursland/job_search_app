@@ -13,12 +13,14 @@ CREATE TABLE jobs (
     company VARCHAR(40) NOT NULL,
     title VARCHAR(40) NOT NULL,
     progress ENUM('not started', 'started', 'completed') NOT NULL,
-    response CASE WHEN progress = 'completed' ENUM('pending', 'rejected', 'offer received'),
+    response ENUM('pending', 'rejected', 'offer received') NULL DEFAULT 'pending',
     deadline DATE NOT NULL,
     details TEXT, 
     recruiter_name VARCHAR(100),
     recruiter_phone VARCHAR(15),
-    recruiter_email VARCHAR(100)
+    recruiter_email VARCHAR(100),
+    INDEX idx_company (company),
+    INDEX idx_title (title)
 )
 
 INSERT INTO jobs (company, title, progress, deadline)
