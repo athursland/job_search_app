@@ -4,7 +4,7 @@ import { getUsers, getUser, createUser  } from './database/db.js'
 
 
 const app = express()
-app.use(express.json)
+app.use(express.json());
 
 app.get("/users", async (req, res) => {
   const users = await getUsers()
@@ -28,6 +28,10 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!")
 })
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.get("/api", (req, res) => {
+  res.json({"users": ["userOne", "userTwo", "userThree", "userFour"]})
+})
+
+app.listen(3001, function () {
+  console.log('Example app listening on port 3001!');
 }); 
