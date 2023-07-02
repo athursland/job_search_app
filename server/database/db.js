@@ -10,51 +10,87 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-// // check that this is right ...
-// export async function getJobs() {
-//     const [rows] = await pool.query("SELECT * from jobs")
-//     return rows
-// }
+/* TO DO:
+need:
+- validate inputs 
+- update functions 
+- delete functions 
+- sorting and filtering functions
+nice to have:
+- use object literals to group related functions within each table (?) 
+- add finally blocks to try-catch clauses for closing connections (?) */
 
-// // check that this is right ...
-// export async function getJob(id) {
-//     const [rows] = await pool.query(`SELECT * 
-//     FROM jobs
-//     WHERE id = ?
-//     `, [id])
-//     return rows[0]
-// }
+/* --- jobs --- */
+/* getJobs(), getJob(), createJob(params)*/
 
-// // check that this is right ...
-// export async function createJob(id) {
-//     const [result] =  await pool.query(`
-//     INSERT INTO jobs(company, title, progress, deadline)
-//     VALUES (?, ?, ?, ?)
-//     `, [company, title, progress, deadline])
+export async function getJobs() {
+    try {
+        const [rows] = await pool.query("SELECT * FROM jobs");
+        return rows;
+    }   catch (error) {
+        throw new Error('Failed to fetch jobs: ' + error.message);
+    }
+}
+
+export async function getJob(id) {
+    try {
+        const [rows] = await pool.query(`SELECT * 
+        FROM jobs 
+        WHERE id = ? 
+        `, [id])
+        return rows[0];
+    } catch (error) {
+        throw new Error('Failed to fetch job: ' + error.message);
+    }
+}
+
+export async function createJob(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title) {
+    try {
+        const [result] =  await pool.query(`
+        INSERT INTO users(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title]);
+    } catch (error) {
+        throw new Error('Failed to create job: ' + error.message);
+    }
     
-//     const id = result.insertId
-//     return getJob(id)
-// }
-// ```
+    const id = result.insertId
+    return getJob(id)
+}
+
+/* --- users  ---*/
 
 export async function getUsers() {
-    const [rows] = await pool.query("SELECT * FROM users")
-    return rows
+    try {
+        const [rows] = await pool.query("SELECT * FROM users");
+        return rows;
+    }   catch (error) {
+        throw new Error('Failed to fetch users: ' + error.message);
+    }
 }
 
 export async function getUser(id) {
-    const [rows] = await pool.query(`SELECT * 
-    FROM users 
-    WHERE id = ? 
-    `, [id])
-    return rows[0]
+    try {
+        const [rows] = await pool.query(`SELECT * 
+        FROM users 
+        WHERE id = ? 
+        `, [id])
+        return rows[0];
+    } catch (error) {
+        throw new Error('Failed to fetch user: ' + error.message);
+    }
 }
 
-export async function createUser(title, email, major) {
-   const [result] =  await pool.query(`
-    INSERT INTO users(title, email, major)
-    VALUES (?, ?, ?)
-    `, [title, email, major])
+/*updated to include new database schema fields */
+export async function createUser(first_name, last_name, email, passwordHash) {
+    try {
+        const [result] =  await pool.query(`
+        INSERT INTO users(first_name, last_name, email, passwordHash)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [first_name,last_name, email, passwordHash]);
+    } catch (error) {
+        throw new Error('Failed to create user: ' + error.message);
+    }
     
     const id = result.insertId
     return getUser(id)
