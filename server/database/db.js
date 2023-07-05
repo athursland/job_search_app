@@ -13,14 +13,12 @@ const pool = mysql.createPool({
 /* TO DO:
 need:
 - validate inputs 
-- update functions
 - sorting and filtering functions
 nice to have:
 - use object literals to group related functions within each table (?) 
 - add finally blocks to try-catch clauses for closing connections (?) */
 
 /* --- jobs --- */
-/* getJobs(), getJob(), createJob(params)*/
 
 export async function getJobs() {
     try {
