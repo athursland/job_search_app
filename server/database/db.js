@@ -13,8 +13,7 @@ const pool = mysql.createPool({
 /* TO DO:
 need:
 - validate inputs 
-- update functions 
-- delete functions 
+- update functions
 - sorting and filtering functions
 nice to have:
 - use object literals to group related functions within each table (?) 
@@ -44,18 +43,40 @@ export async function getJob(id) {
     }
 }
 
-export async function createJob(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title) {
+export async function createJob(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email) {
     try {
         const [result] =  await pool.query(`
-        INSERT INTO users(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title)
+        INSERT INTO users(user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email, idx_company, idx_title]);
+        `, [user_id, company, title, deadline, progress, response, dt_created, details, recruiter_name, recruiter_phone, recruiter_email]);
     } catch (error) {
         throw new Error('Failed to create job: ' + error.message);
     }
-    
     const id = result.insertId
     return getJob(id)
+}
+
+export async function updateJob(id, updates) {
+    try {
+        const { company, title, deadline, progress, response, details, recruiter_name, recruiter_phone, recruiter_email } = updates;
+        await pool.query(`
+            UPDATE jobs 
+            SET company = ?, title = ?, deadline = ?, progress = ?, response = ?, details = ?, recruiter_name = ?, recruiter_phone = ?, recruiter_email = ?
+            WHERE id = ?
+        `, [company, title, deadline, progress, response, details, recruiter_name, recruiter_phone, recruiter_email, id]);
+        return getJob(id);
+    } catch (error) {
+        throw new Error('Failed to update job: ' + error.message);
+    }
+}
+
+export async function deleteJob(id) {
+    try {
+        await pool.query(`DELETE FROM jobs WHERE id = ?`, [id]);
+        return true;
+    } catch (error) {
+        throw new Error('Failed to delete job: ' + error.message);
+    }
 }
 
 /* --- users  ---*/
@@ -86,7 +107,7 @@ export async function createUser(first_name, last_name, email, passwordHash) {
     try {
         const [result] =  await pool.query(`
         INSERT INTO users(first_name, last_name, email, passwordHash)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?)
         `, [first_name,last_name, email, passwordHash]);
     } catch (error) {
         throw new Error('Failed to create user: ' + error.message);
@@ -94,6 +115,29 @@ export async function createUser(first_name, last_name, email, passwordHash) {
     
     const id = result.insertId
     return getUser(id)
+}
+
+export async function updateUser(id, updates) {
+    try {
+        const { first_name, middle_name, last_name, title, school, major, email } = updates;
+        await pool.query(`
+            UPDATE users 
+            SET first_name = ?, middle_name = ?, last_name = ?, title = ?, school = ?, major = ?, email = ?
+            WHERE id = ?
+        `, [first_name, middle_name, last_name, title, school, major, email, id]);
+        return getUser(id);
+    } catch (error) {
+        throw new Error('Failed to update user: ' + error.message);
+    }
+}
+
+export async function deleteUser(id) {
+    try {
+        await pool.query(`DELETE FROM users WHERE id = ?`, [id]);
+        return true;
+    } catch (error) {
+        throw new Error('Failed to delete user: ' + error.message);
+    }
 }
 
 // const result = await createUser('test', 'test', 'test')

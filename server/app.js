@@ -29,6 +29,7 @@ app.use((err, req, res, next) => {
 })
 
 app.get("/api", (req, res) => {
+  console.log('Hi')
   res.json({"users": ["userOne", "userTwo", "userThree", "userFour"]})
 })
 
