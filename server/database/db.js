@@ -6,7 +6,7 @@ dotenv.config()
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: 'root', 
-    password: '@Jtmetjmt4!', 
+    password: 'password', 
     database: process.env.MYSQL_DATABASE
 }).promise()
 
